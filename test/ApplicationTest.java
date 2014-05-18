@@ -41,7 +41,7 @@ public class ApplicationTest {
         Form<TestModel> testForm = Form.form(TestModel.class);
         Content html = views.html.index.render("Your new application is ready.", TestModel.all(), testForm);
         assertThat(contentType(html)).isEqualTo("text/html");
-        assertThat(contentAsString(html)).contains("Your new application is ready.");
+        assertThat(contentAsString(html)).contains("Welcome");
     }
 
 

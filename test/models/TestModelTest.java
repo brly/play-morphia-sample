@@ -1,25 +1,39 @@
 package models;
 
-import static play.test.Helpers.fakeApplication;
-import static play.test.Helpers.inMemoryDatabase;
-import static play.test.Helpers.start;
+import static org.fest.assertions.Assertions.assertThat;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.fest.assertions.Assertions.*;
+import com.google.code.morphia.Morphia;
+import com.mongodb.BasicDBObject;
 
-public class TestModelTest {
+import controllers.MorphiaObject;
+import de.flapdoodle.embed.mongo.MongodExecutable;
+import de.flapdoodle.embed.mongo.MongodProcess;
+import de.flapdoodle.embed.mongo.distribution.Version;
+import de.flapdoodle.embed.process.runtime.Network;
+//import play.modules.morphia.MorphiaPlugin;
 
+public class TestModelTest extends AbstractMongoDbTest {
+
+  MongodProcess mongod;
+  static int PORT = 12345;
+  
   @Before
-  public void setUp() {
-    start(fakeApplication(inMemoryDatabase()));
+  public void beforeTest() {
+    MorphiaObject.mongo = getMongoClient();
+    MorphiaObject.datastore = new Morphia().createDatastore(getMongoClient(), "test");
   }
   
   @Test
   public void 初期値は空リスト() {
     assertThat(TestModel.all()).isEmpty();
   }
+  
   
   @Test
   public void addしたものが順番に取り出せる() {
@@ -50,6 +64,10 @@ public class TestModelTest {
     
     assertThat(TestModel.all()).hasSize(5);
     assertThat(TestModel.all().get(0).name).isEqualTo("ほとココア");
+    assertThat(TestModel.all().get(1).name).isEqualTo("かふうチノ");
+    assertThat(TestModel.all().get(2).name).isEqualTo("てでざリゼ");
+    assertThat(TestModel.all().get(3).name).isEqualTo("うじまつチヤ");
+    assertThat(TestModel.all().get(4).name).isEqualTo("きりまシャロ");
   }
 
 }
